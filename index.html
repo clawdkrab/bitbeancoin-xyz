@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- custom -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BitBean ($BITBEAN) on Solana</title>
+<meta name="description" content="The caped green bean superhero. An old internet meme, back for another round.">
+<meta property="og:title" content="BitBean ($BITBEAN)">
+<meta property="og:description" content="The caped green bean superhero. An old internet meme, back for another round.">
+<meta property="og:image" content="banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--mint:#d6f1da;--mint2:#eef9ef;--dark:#14340C;--green:#2F8A1D;--green2:#1f6a12;--lime:#9ad94a;--gold:#f1c232;--white:#fff;--grey:#c9d9c7;--sky:#cfeaf8}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--mint);color:var(--dark);font-family:Fredoka,Verdana,sans-serif;font-size:16px;line-height:1.55;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+.px{font-family:"Press Start 2P",monospace;font-weight:400;line-height:1.5;letter-spacing:0}
+h1,h2,h3{font-family:"Press Start 2P",monospace;font-weight:400;line-height:1.4}
+a{color:var(--green2)}
+
+/* sky layers */
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cl{position:absolute;inset:-20% 0;will-change:transform}
+.cloud{position:absolute;width:140px;height:44px;background:#fff;border-radius:40px;opacity:.9}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:60px;height:60px;left:22px;top:-28px}
+.cloud::after{width:44px;height:44px;left:70px;top:-16px}
+.cl-far .cloud{transform:scale(.55);opacity:.55}
+.cl-mid .cloud{transform:scale(.85);opacity:.8}
+.cl-near .cloud{transform:scale(1.25);opacity:.95;filter:drop-shadow(0 6px 0 rgba(20,52,12,.12))}
+
+/* flying bean */
+.bean{position:fixed;left:0;top:0;z-index:40;width:240px;pointer-events:none;will-change:transform;mix-blend-mode:multiply}
+.bean img{clip-path:polygon(26% 14%,40% 12%,52% 20%,56% 32%,56% 40%,76% 43%,77% 56%,70% 63%,60% 67%,58% 74%,61% 83%,54% 84%,49% 74%,43% 83%,36% 78%,31% 72%,24% 62%,17% 55%,16% 50%,22% 44%,20% 34%,21% 22%)}
+.bean .zoom{position:absolute;left:-10px;bottom:30px;font-family:"Press Start 2P";font-size:9px;color:var(--green2);background:#fff;padding:3px 5px;border:2px solid var(--dark);box-shadow:3px 3px 0 var(--dark)}
+
+/* page table */
+.page{position:relative;z-index:2;width:min(980px,96vw);margin:1.2rem auto 3rem;background:var(--mint2);border:3px solid var(--dark);box-shadow:8px 8px 0 var(--dark)}
+.banner{border-bottom:3px solid var(--dark);background:#122b00}
+.banner img{width:100%;aspect-ratio:3/1;object-fit:cover}
+.marq{background:var(--dark);color:var(--lime);font-family:"Press Start 2P";font-size:11px;padding:.6rem 0;overflow:hidden;white-space:nowrap;border-bottom:3px solid var(--dark)}
+.marq .track{display:inline-block;animation:marq 22s linear infinite;padding-left:0}
+.marq .track span{margin-right:3rem}
+@keyframes marq{to{transform:translateX(-50%)}}
+.navbar{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--grey);border-bottom:3px solid var(--dark)}
+.bev{font-family:"Press Start 2P";font-size:10px;color:var(--dark);background:linear-gradient(#f6fff5,#cfe6cc);border:2px solid;border-color:#fff #4d6b48 #4d6b48 #fff;box-shadow:1px 1px 0 var(--dark);padding:8px 12px;text-decoration:none;cursor:pointer;display:inline-block;line-height:1}
+.bev:active{border-color:#4d6b48 #fff #fff #4d6b48}
+.bev.go{background:linear-gradient(#b7f27a,#2F8A1D);color:#fff;text-shadow:1px 1px 0 var(--dark)}
+
+
+.cols{display:grid;grid-template-columns:210px 1fr}
+.side{border-right:3px solid var(--dark);background:#e2f3df;padding:12px}
+.side .stick{position:sticky;top:12px}
+.sidebox{border:2px solid var(--dark);background:#fff;margin-bottom:12px;box-shadow:3px 3px 0 var(--dark)}
+.sidebox h4{font-family:"Press Start 2P";font-size:9px;background:var(--dark);color:var(--lime);padding:6px 8px}
+.sidebox .in{padding:8px;font-size:.85rem}
+.sidebox ul{list-style:none}
+.sidebox li a{display:block;padding:4px 0;color:var(--dark);text-decoration:none;font-weight:600}
+.sidebox li a::before{content:"\25B8 ";color:var(--green)}
+.sidebox li a:hover{color:var(--green)}
+.counter{font-family:"Press Start 2P";font-size:12px;letter-spacing:2px;background:#000;color:#9ad94a;padding:6px 8px;text-align:center;border:2px inset #777}
+.sticker{display:inline-block;transform:rotate(-4deg);font-family:"Press Start 2P";font-size:8px;background:var(--gold);border:2px solid var(--dark);padding:5px 7px;margin-top:6px;box-shadow:2px 2px 0 var(--dark)}
+.webring{font-size:.75rem;text-align:center;color:#4d6b48}
+.uc{height:14px;background:repeating-linear-gradient(135deg,#f1c232 0 12px,#111 12px 24px);border-top:2px solid var(--dark);border-bottom:2px solid var(--dark);margin:10px -12px}
+
+.main{padding:14px}
+.win{border:2px solid var(--dark);background:#fff;margin-bottom:18px;box-shadow:4px 4px 0 var(--dark)}
+.win .tb{display:flex;align-items:center;gap:8px;background:linear-gradient(90deg,var(--green2),var(--green) 60%,var(--lime));color:#fff;padding:7px 10px;border-bottom:2px solid var(--dark)}
+.win .tb h2{font-size:11px;flex:1;text-shadow:1px 1px 0 var(--dark);margin:0}
+.win .tb i{width:14px;height:14px;border:2px solid var(--dark);background:#e7e7e7;display:inline-block;box-shadow:inset -2px -2px 0 #999}
+.win .body{padding:16px}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:center}
+.hero h1{font-size:clamp(20px,3.2vw,34px);color:var(--green2);text-shadow:3px 3px 0 var(--lime),5px 5px 0 var(--dark);line-height:1.5}
+.hero h1 small{display:block;font-size:11px;color:var(--dark);text-shadow:none;margin-top:8px}
+.hero p{margin:14px 0 18px;font-size:1.1rem}
+.hero .img{border:2px solid var(--dark);background:var(--mint);box-shadow:4px 4px 0 var(--dark);transform-style:preserve-3d;will-change:transform}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.ca{margin-top:16px;border:2px solid var(--dark);background:#f7fff5;padding:10px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.ca label{grid-column:1/-1;font-family:"Press Start 2P";font-size:8px;color:var(--green2)}
+.ca code{font-family:ui-monospace,Menlo,monospace;font-size:.9rem;word-break:break-all;background:#fff;border:2px inset #999;padding:6px}
+.blink{animation:blink 1s steps(1) infinite;color:#d00;font-family:"Press Start 2P";font-size:9px}
+@keyframes blink{50%{opacity:0}}
+.lore p{margin-bottom:12px;font-size:1.05rem}
+.lore p::first-letter{font-family:"Press Start 2P";color:var(--green);font-size:1.3em}
+.steps{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.steps li{border:2px solid var(--dark);padding:12px;background:#f7fff5;box-shadow:3px 3px 0 var(--dark);position:relative}
+.steps li b{display:block;font-family:"Press Start 2P";font-size:10px;color:var(--green2);margin-bottom:8px}
+.steps li span.n{position:absolute;top:-10px;right:-10px;width:30px;height:30px;background:var(--gold);border:2px solid var(--dark);font-family:"Press Start 2P";font-size:11px;display:grid;place-items:center}
+table{width:100%;border-collapse:collapse;font-size:1rem}
+th,td{border:2px solid var(--dark);padding:8px 10px;text-align:left}
+th{background:var(--grey);font-family:"Press Start 2P";font-size:9px}
+tr:nth-child(even) td{background:#f1faef}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gal figure{border:3px solid var(--dark);outline:3px solid #fff;outline-offset:-6px;box-shadow:4px 4px 0 var(--dark);background:#fff;transition:transform .2s}
+.gal figure:hover{transform:translate(-2px,-2px)}
+.gal img{aspect-ratio:1;object-fit:cover;width:100%}
+.gal figcaption{font-family:"Press Start 2P";font-size:8px;padding:6px;background:var(--grey);border-top:2px solid var(--dark)}
+.foot{border-top:3px solid var(--dark);background:var(--grey);padding:16px;text-align:center}
+.socials{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.pill{font-size:.8rem;font-weight:700;padding:5px 12px;border:2px solid var(--dark);background:#fff;border-radius:999px;text-decoration:none;color:var(--dark);box-shadow:2px 2px 0 var(--dark)}
+.pill:hover{background:var(--lime)}
+.disc{font-size:.78rem;color:#2d4a28;max-width:720px;margin:0 auto 8px}
+.tiny{font-family:"Press Start 2P";font-size:7px;color:#4d6b48}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:820px){
+  .cols{grid-template-columns:1fr}
+  .side{border-right:0;border-bottom:3px solid var(--dark)}
+  .side .stick{position:static}
+  .hero{grid-template-columns:1fr}
+  .hero .img{max-width:300px;margin:0 auto}
+  .steps,.gal{grid-template-columns:1fr 1fr}
+  .bean{width:130px}
+  .bean .zoom{display:none}
+  .uc{margin:10px -12px}
+}
+@media (max-width:480px){.gal{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){
+  .marq .track,.blink{animation:none}
+  .rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+  .bean{display:none}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true">
+  <div class="cl cl-far" data-s="0.05" data-m="4">
+    <div class="cloud" style="left:5%;top:10%"></div><div class="cloud" style="left:40%;top:25%"></div><div class="cloud" style="left:75%;top:8%"></div><div class="cloud" style="left:20%;top:55%"></div><div class="cloud" style="left:60%;top:70%"></div><div class="cloud" style="left:88%;top:45%"></div><div class="cloud" style="left:10%;top:85%"></div>
+  </div>
+  <div class="cl cl-mid" data-s="0.14" data-m="10">
+    <div class="cloud" style="left:12%;top:18%"></div><div class="cloud" style="left:55%;top:5%"></div><div class="cloud" style="left:85%;top:30%"></div><div class="cloud" style="left:30%;top:75%"></div><div class="cloud" style="left:70%;top:90%"></div>
+  </div>
+  <div class="cl cl-near" data-s="0.3" data-m="20">
+    <div class="cloud" style="left:-2%;top:35%"></div><div class="cloud" style="left:80%;top:60%"></div><div class="cloud" style="left:45%;top:95%"></div>
+  </div>
+</div>
+
+<div class="bean" id="bean" aria-hidden="true"><img src="hero.png" alt="" width="1100" height="1100"><span class="zoom">WHOOSH</span></div>
+
+<div class="page">
+  <div class="banner"><img src="banner.jpg" alt="BitBean banner" width="1500" height="500"></div>
+  <div class="marq"><div class="track"><span>HERE COME DAT BEAN</span><span>&#9733; $BITBEAN &#9733;</span><span>IT WAS ALWAYS BEAN</span><span>A BEAN A DAY KEEPS THE JEETS AWAY</span><span>GM BEAN TEAM</span><span>HERE COME DAT BEAN</span><span>&#9733; $BITBEAN &#9733;</span><span>IT WAS ALWAYS BEAN</span><span>A BEAN A DAY KEEPS THE JEETS AWAY</span><span>GM BEAN TEAM</span></div></div>
+  <nav class="navbar">
+    <a class="bev" href="#home">HOME</a><a class="bev" href="#about">ABOUT</a><a class="bev" href="#buy">BUY</a><a class="bev" href="#stats">STATS</a><a class="bev" href="#gallery">GALLERY</a>
+    <span style="flex:1"></span>
+    <a class="bev go" href="#" target="_blank" rel="noopener">BUY $BITBEAN</a>
+  </nav>
+
+  <div class="cols">
+    <aside class="side">
+      <div class="stick">
+        <div class="sidebox"><h4>NAVIGATE</h4><div class="in"><ul>
+          <li><a href="#home">Home</a></li><li><a href="#about">The bean returns</a></li><li><a href="#buy">How to buy</a></li><li><a href="#stats">Beanomics</a></li><li><a href="#gallery">Meme gallery</a></li>
+        </ul></div></div>
+        <div class="sidebox"><h4>VISITORS</h4><div class="in"><div class="counter" id="counter">0000001</div><div class="sticker">BEST VIEWED 1024x768</div></div></div>
+        <div class="uc"></div>
+        <div class="sidebox"><h4>LINKS</h4><div class="in"><ul>
+          <li><a href="#" target="_blank" rel="noopener">pump.fun</a></li><li><a href="#" target="_blank" rel="noopener">X / Twitter</a></li><li><a href="#" target="_blank" rel="noopener">DEX Screener</a></li>
+        </ul></div></div>
+        <p class="webring">[ &lt;&lt; bean ring &gt;&gt; ]<br>est. 2015 &middot; relaunched 2026</p>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="win" id="home">
+        <div class="tb"><h2>welcome.html</h2><i></i><i></i></div>
+        <div class="body hero">
+          <div>
+            <h1>BITBEAN<small>$BITBEAN on Solana</small></h1>
+            <p>The caped green bean superhero. An old internet meme, back for another round.</p>
+            <div class="btns"><a class="bev go" href="#" target="_blank" rel="noopener">BUY ON PUMP.FUN</a></div>
+            <div class="ca"><label>CONTRACT ADDRESS</label><code id="ca">Contract address revealed at launch</code><button class="bev" id="copy" type="button">COPY</button></div>
+            <p class="blink" style="margin-top:12px">NEW! &#9733; cape out, grin on &#9733;</p>
+          </div>
+          <div class="img" id="tilt"><img src="logo.png" alt="BitBean flexing" width="1000" height="1000"></div>
+        </div>
+      </div>
+
+      <div class="win rv" id="about">
+        <div class="tb"><h2>the_bean_returns.txt</h2><i></i><i></i></div>
+        <div class="body lore">
+          <p>Back in 2015 a little green bean with a cape became a running joke on crypto forums: always flexing, always flying, always about to save the day.</p>
+          <p>BitBean is that bean, redrawn and relaunched on Solana as a pure meme. Gold boots, gold gloves, cape out, grin on.</p>
+          <p>No roadmap, no VC, no team bag, and no connection to any earlier project of the same name. Just a heroic bean and a team that makes memes.</p>
+        </div>
+      </div>
+
+      <div class="win rv" id="buy">
+        <div class="tb"><h2>how_to_buy.htm</h2><i></i><i></i></div>
+        <div class="body"><ol class="steps">
+          <li><span class="n">1</span><b>GET A WALLET</b>Install Phantom or Solflare and back up the seed phrase offline.</li>
+          <li><span class="n">2</span><b>GET SOL</b>Buy SOL on an exchange and send it to your wallet.</li>
+          <li><span class="n">3</span><b>OPEN PUMP.FUN</b>Connect your wallet, search $BITBEAN and verify the contract address against the one pinned on our X.</li>
+          <li><span class="n">4</span><b>SWAP</b>Enter an amount of SOL, confirm, and welcome to the team. Here come dat bean.</li>
+        </ol></div>
+      </div>
+
+      <div class="win rv" id="stats">
+        <div class="tb"><h2>beanomics.xls</h2><i></i><i></i></div>
+        <div class="body"><table>
+          <tr><th>FIELD</th><th>VALUE</th></tr>
+          <tr><td>Supply</td><td>1,000,000,000</td></tr>
+          <tr><td>Launch</td><td>Fair launch on pump.fun</td></tr>
+          <tr><td>Tax</td><td>0% buy / 0% sell</td></tr>
+          <tr><td>Liquidity</td><td>Auto-migrated &amp; burned by pump.fun</td></tr>
+        </table></div>
+      </div>
+
+      <div class="win rv" id="gallery">
+        <div class="tb"><h2>gallery (9 files)</h2><i></i><i></i></div>
+        <div class="body"><div class="gal">
+          <figure><img loading="lazy" src="meme_01.jpg" alt="BitBean meme 1"><figcaption>bean_01.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_02.jpg" alt="BitBean meme 2"><figcaption>bean_02.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_03.jpg" alt="BitBean meme 3"><figcaption>bean_03.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_04.jpg" alt="BitBean meme 4"><figcaption>bean_04.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_05.jpg" alt="BitBean meme 5"><figcaption>bean_05.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_06.jpg" alt="BitBean meme 6"><figcaption>bean_06.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_07.jpg" alt="BitBean meme 7"><figcaption>bean_07.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_08.jpg" alt="BitBean meme 8"><figcaption>bean_08.jpg</figcaption></figure>
+          <figure><img loading="lazy" src="meme_09.jpg" alt="BitBean meme 9"><figcaption>bean_09.jpg</figcaption></figure>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="socials">
+      <a class="pill" href="#" target="_blank" rel="noopener">X / Twitter</a>
+      
+      <a class="pill" href="#" target="_blank" rel="noopener">pump.fun</a>
+      <a class="pill" href="#" target="_blank" rel="noopener">DEX Screener</a>
+    </div>
+    <p class="disc">$BITBEAN is a memecoin with no intrinsic value or expectation of financial return. It is not affiliated with, endorsed by, or connected to any person, brand or company referenced in its memes. There is no team roadmap or promise of profit. Crypto is volatile; only spend what you can afford to lose.</p>
+    <p class="tiny">(c) BEAN TEAM &middot; NO COOKIES &middot; NO ROADMAP &middot; PAGE LOADS IN 0.3s ON 56K</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CA='';
+  var btn=document.getElementById('copy');
+  btn.addEventListener('click',function(){
+    if(!CA){btn.textContent='SOON';setTimeout(function(){btn.textContent='COPY'},1400);return}
+    try{navigator.clipboard.writeText(CA).then(function(){btn.textContent='COPIED';setTimeout(function(){btn.textContent='COPY'},1400)}).catch(function(){btn.textContent='SELECT'})}
+    catch(e){btn.textContent='SELECT'}
+  });
+  /* visitor counter (local, per browser) */
+  try{var n=parseInt(localStorage.getItem('bean_visits')||'0',10)+1;localStorage.setItem('bean_visits',String(n));document.getElementById('counter').textContent=String(1337+n).padStart(7,'0')}catch(e){}
+
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window && !RM){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});
+    rv.forEach(function(el){io.observe(el)});
+  } else rv.forEach(function(el){el.classList.add('in')});
+  if(RM) return;
+
+  var layers=[].map.call(document.querySelectorAll('.cl'),function(l){return {el:l,s:parseFloat(l.dataset.s),m:parseFloat(l.dataset.m)}});
+  var bean=document.getElementById('bean'), tilt=document.getElementById('tilt');
+  var tx=0,ty=0,mx=0,my=0;
+  window.addEventListener('pointermove',function(e){tx=e.clientX/window.innerWidth-.5;ty=e.clientY/window.innerHeight-.5},{passive:true});
+  function frame(){
+    var y=window.scrollY, H=document.documentElement.scrollHeight-window.innerHeight, p=H>0?y/H:0;
+    mx+=(tx-mx)*.1; my+=(ty-my)*.1;
+    for(var i=0;i<layers.length;i++){var l=layers[i];l.el.style.transform='translate3d('+(mx*l.m-y*l.s*.3).toFixed(1)+'px,'+(y*l.s+my*l.m).toFixed(1)+'px,0)'}
+    /* bean flies bottom-left -> top-right as you scroll */
+    var bw=bean.offsetWidth, W=window.innerWidth, Vh=window.innerHeight;
+    var bx=-bw+(W+bw*2)*p, by=Vh*.85-(Vh*.95)*p;
+    var wob=Math.sin(y/90)*6;
+    bean.style.transform='translate3d('+(bx+mx*30).toFixed(1)+'px,'+(by+wob+my*20).toFixed(1)+'px,0) rotate('+(-18+Math.sin(y/140)*4).toFixed(1)+'deg)';
+    if(tilt)tilt.style.transform='perspective(700px) rotateY('+(mx*12).toFixed(2)+'deg) rotateX('+(-my*10).toFixed(2)+'deg)';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
